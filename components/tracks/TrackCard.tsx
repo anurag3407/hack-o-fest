@@ -24,6 +24,12 @@ export function TrackCard({ id, name, subtitle, blurb, number, sponsor }: Props)
         boxShadow: `0 60px 120px -40px ${color.aura}`,
       }}
     >
+      <img
+        src={`/img/tracks/${id}.jpg`}
+        alt={name}
+        className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay pointer-events-none"
+        onError={(e) => (e.currentTarget.style.display = "none")}
+      />
       {/* halftone reveal */}
       <div
         className="halftone-wipe absolute inset-0 pointer-events-none"

@@ -91,7 +91,14 @@ export const HeroSlot = forwardRef<HTMLDivElement, Props>(function HeroSlot(
           )}
         </svg>
 
-        <div className="font-accent text-cream/60 text-xl tracking-widest rotate-[-8deg]">
+        <img
+          src={`/img/hero/hero-${slot}.jpg`}
+          alt={`Hero ${slot}`}
+          className="absolute inset-0 w-full h-full object-cover rounded-[10%] opacity-80"
+          onError={(e) => (e.currentTarget.style.display = "none")}
+        />
+
+        <div className="font-accent text-cream/60 text-xl tracking-widest rotate-[-8deg] mix-blend-overlay">
           // PLACEHOLDER
         </div>
       </div>
