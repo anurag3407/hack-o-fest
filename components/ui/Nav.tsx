@@ -10,6 +10,7 @@ const links = [
   { href: "/#timeline", label: "Timeline" },
   { href: "/id-card", label: "ID Card" },
   { href: "/status", label: "Team Status" },
+  { href: "/about", label: "About" },
 ];
 
 export function Nav() {
@@ -52,7 +53,8 @@ export function Nav() {
             <span className="absolute inset-[12px] rounded-full bg-crimson" />
           </span>
           <span className="font-display text-2xl tracking-wide">
-            HACK<span className="text-crimson">·</span>O<span className="text-crimson">·</span>FEST
+            HACK<span className="text-crimson">·</span>O
+            <span className="text-crimson">·</span>FEST
           </span>
         </Link>
 
@@ -75,7 +77,9 @@ export function Nav() {
           data-magnetic
         >
           <span className="relative z-10">Register</span>
-          <span className="relative z-10 transition-transform group-hover:translate-x-1">→</span>
+          <span className="relative z-10 transition-transform group-hover:translate-x-1">
+            →
+          </span>
           <span className="absolute inset-0 bg-crimson translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
           <span className="absolute inset-0 -z-0 bg-gold" />
         </Link>
