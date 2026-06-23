@@ -1,176 +1,109 @@
-# Image Prompts // HACK-O-FEST
+# HACK-O-FEST — Hero Image Prompts
 
-This file maps every placeholder image in the site to the prompt you should
-feed your generator of choice (Midjourney v6, Flux.1 dev, Stable Diffusion XL).
-Drop the resulting file at the listed path and the site picks it up — no code
-changes needed.
+Drop generated files at the listed paths and they'll be picked up automatically.
+All hero art is consumed by `components/hero/HeroExperience.tsx`.
 
-**Global style anchors** (paste into every prompt):
+Generate with agy directly, e.g.:
 
-> cinematic comic-book homage, gritty halftone texture, deep cosmic blacks
-> (#0A0A12) with electric crimson (#FF2D55), cosmic gold (#FFD23F), gamma
-> green (#B4FF39), infinity purple (#7A3CFF), shock cyan (#00E5FF). Bold
-> shapes, oversized geometric forms, dramatic rim light, volumetric haze, 35mm
-> film grain. Wide compositions with intentional negative space. NO official
-> Marvel logos, characters, or trademarks. Original geometric stones, shields,
-> gauntlets.
+> Generate an image for: <paste a prompt below>
 
-**Aspect ratios**: most heroes are 16:9 or 1:1. Track cards are 4:5. Textures
-are seamless 1024×1024.
+Then save/copy the result to the target path.
 
 ---
 
-## Hero (3 cinematic layers)
+## 1. Hero nebula backdrop — **ACTIVE** (already generated & placed)
 
-### `/public/img/hero/hero-1.jpg`
-> **Aspect**: 16:9 · **Slot**: ASSEMBLE
-> A cosmic void — a single luminous obsidian dodecahedron suspended in a deep
-> black nebula. Faint star-fields, dust motes catching gold rim-light. Camera
-> slightly below the object, looking up. Mood: birth-of-something quiet,
-> imminent, unsettling. Empty center where future 3D model will be composited.
-> No text.
+- **Path:** `public/img/hero/hero-bg.jpg`
+- **Aspect:** 16:9, at least 1920×1080 (2560×1440 preferred)
+- **Used by:** beats 0–2 (HERO / ABOUT / STATS) as the fixed backdrop behind the suit.
 
-### `/public/img/hero/hero-2.jpg`
-> **Aspect**: 16:9 · **Slot**: INFINITY
-> Deep infinity-purple gradient (#5a2bd0 → #1a0a3a). A floating geometric
-> stone with internal lightning, suspended above a cracked cosmic plinth.
-> Halftone dot texture across the lower third. Dust particles drifting right.
-> Mood: charged, swelling, about to detonate.
+**Prompt:**
 
-### `/public/img/hero/hero-3.jpg`
-> **Aspect**: 16:9 · **Slot**: MULTIVERSE
-> Electric crimson explosion of fragmented mirrors — a single point of impact
-> radiating outward into infinite reflective shards. Gamma-green vignette at
-> the edges. Cinematic anamorphic flare across the horizontal. Mood: arrival,
-> ignition, "we&apos;re in."
+```
+A cinematic, premium hero-section background for a Marvel-homage hackathon.
+Ultra-detailed atmospheric concept art, 16:9, dark and moody. A deep void-black
+field transitioning into deep royal purple and crimson nebula toward the top.
+Volumetric god-rays and soft cinematic haze. A concentrated warm gold + arc-reactor
+cyan energy glow low in the CENTER-BOTTOM of the frame, as if a powerful light
+source rests on the ground center. Faint floating embers and energy particles.
+Subtle hexagonal Tony-Stark HUD circuitry etched faintly into the darkness at the
+sides. Keep the lower-center area relatively clear (negative space) so a 3D
+character can stand there. NO text, NO words, NO logos, NO characters or people
+or robots — only environment and atmosphere.
+```
 
 ---
 
-## Track cards (6 stones)
+## 1b. Gold workshop backdrop (beat 1 · ABOUT) — **ACTIVE**
 
-Each card is portrait 4:5. Card placement: as a background image inside
-`components/tracks/TrackCard.tsx`. Override the gradient with a Next/Image when
-ready.
+- **Path:** `public/img/hero/hero-gold.jpg`
+- **Used by:** beat 1 (the suit slides right; copy on the left), cross-faded in.
 
-### `/public/img/tracks/reality.jpg`
-> **Color**: crimson (#FF2D55)
-> A floating crimson stone wrapped in glitchy reality fragments — billboards,
-> typography, AI-generated faces dissolving into pixels. Dramatic side-light.
-> 4:5 portrait.
+**Prompt:**
 
-### `/public/img/tracks/power.jpg`
-> **Color**: infinity purple (#7A3CFF)
-> A purple stone radiating energy through chained metallic links. Cracked
-> cosmic stone background. Backlit. 4:5 portrait.
-
-### `/public/img/tracks/mind.jpg`
-> **Color**: gamma green (#B4FF39)
-> A gamma-green stone surrounded by orbiting neural webs and floating glyphs.
-> Soft top-light. Dust. 4:5 portrait.
-
-### `/public/img/tracks/time.jpg`
-> **Color**: gold (#FFD23F)
-> A gold stone embedded in a fractured analog clock face, hands frozen at
-> different times. Sparks. 4:5 portrait.
-
-### `/public/img/tracks/space.jpg`
-> **Color**: cyan (#00E5FF)
-> A shock-cyan stone in deep space, distant planets, a wormhole behind it.
-> Rim light. 4:5 portrait.
-
-### `/public/img/tracks/soul.jpg`
-> **Color**: warm orange (#FF7A3C)
-> An orange stone in a misty cathedral of light — soft volumetric beams,
-> floating dust, reverent mood. 4:5 portrait.
+```
+A cinematic hero-section background for a Marvel-homage hackathon. Ultra-detailed
+atmospheric concept art, 16:9, dark and moody. A warm GOLD and amber energy
+environment — an abstract Tony-Stark-workshop / arc-reactor-laboratory vibe: deep
+black base, glowing molten-gold volumetric light with rising embers, faint
+hexagonal HUD circuitry and holographic blueprint lines etched in gold, soft
+cinematic god-rays and haze. Keep the RIGHT third darker/clearer (negative space)
+so a 3D character can stand there; concentrate the gold glow toward center-left.
+NO text, NO words, NO logos, NO characters, NO people, NO robots.
+```
 
 ---
 
-## Themes (6 panel tiles)
+## 1c. Cyan data-grid backdrop (beat 2 · STATS) — **ACTIVE**
 
-Square panels, used as background fills in `components/themes/Themes.tsx`.
+- **Path:** `public/img/hero/hero-cyan.jpg`
+- **Used by:** beat 2 (the suit slides left; copy on the right), cross-faded in.
 
-### `/public/img/themes/time-collapse.jpg`
-> Layered chronograph dials disintegrating, infinity-purple glow. Square.
+**Prompt:**
 
-### `/public/img/themes/agents-unchained.jpg`
-> Robotic puppet strings being severed by glowing gamma-green hands. Square.
-
-### `/public/img/themes/off-world-ux.jpg`
-> A holographic spatial interface floating on a Martian dune at golden hour. Square.
-
-### `/public/img/themes/tiny-giants.jpg`
-> A massive silver mech the size of a coin, shot macro on a circuit board. Square.
-
-### `/public/img/themes/culture-stack.jpg`
-> A vinyl record splitting into film strips and food photography, gold leaf
-> accents. Square.
-
-### `/public/img/themes/wild-card.jpg`
-> A card mid-flip in zero gravity, splitting into mirror-shards reflecting
-> different worlds. Square.
+```
+A cinematic hero-section background for a Marvel-homage hackathon. Ultra-detailed
+atmospheric concept art, 16:9, dark and moody. A cool CYAN and electric-blue
+holographic data environment: deep black base, glowing cyan volumetric light,
+faint streams of floating holographic data and particles, a subtle perspective
+grid receding into darkness, arc-reactor-blue energy haze, hexagonal HUD circuitry
+in blue. Keep the LEFT third darker/clearer (negative space) so a 3D character can
+stand there; concentrate the cyan glow toward center-right. NO text, NO words, NO
+logos, NO characters, NO people, NO robots.
+```
 
 ---
 
-## Prizes
+## 2. Resting / landing backdrop — **ACTIVE** (using provided `resting_image.jpg`)
 
-### `/public/img/prizes/podium-gold.jpg`
-> **Aspect**: 9:16 (or 3:4)
-> Texture: a tall golden monolith catching theatrical spotlight, halftone dust
-> swirling, brushed metal finish.
+- **Path:** `public/img/hero/resting.jpg`
+- **Currently:** the provided Hall-of-Armor photo, copied in.
+- **Used by:** beat 3 (REST), cross-faded in over the final third of the scroll as
+  the suit settles to center for its "natural landing".
 
-### `/public/img/prizes/podium-silver.jpg`
-> **Aspect**: 9:16
-> Texture: a gamma-green monolith with subtle holographic surface and circuit
-> etchings.
+**Regen prompt (if you want a cleaner, centered plate):**
 
-### `/public/img/prizes/podium-bronze.jpg`
-> **Aspect**: 9:16
-> Texture: a crimson monolith with embers and ash drifting upward.
-
----
-
-## Textures / overlays (seamless 1024×1024)
-
-### `/public/img/textures/halftone-paper.jpg`
-> Seamless newsprint halftone — cream paper, dark dots, slight stain texture.
-> 1024×1024 seamless.
-
-### `/public/img/textures/gold-foil.jpg`
-> Seamless brushed gold foil with micro-creases and warm highlights. 1024×1024.
-
-### `/public/img/textures/comic-paper.jpg`
-> Scratchy off-white comic-book interior paper with subtle yellowing and ink
-> bleed. 1024×1024 seamless.
-
-### `/public/img/textures/nebula-noise.jpg`
-> A deep cosmic nebula texture — purple-to-black gradient with subtle red and
-> gold star clusters. 1024×1024 seamless tileable.
+```
+Interior of Tony Stark's "Hall of Armor": a dark, polished basement gallery with a
+circular metal dais in the center and softly back-lit glass display alcoves along a
+curved back wall. Cinematic, moody, cool blue-white rim lighting with warm gold
+accents, glossy reflective black floor, shallow depth of field. Symmetrical, the
+CENTER of the frame is an empty lit platform (no armor in the center slot) so a 3D
+character can stand there. Photoreal, 16:9. NO text, NO logos, NO visible people.
+```
 
 ---
 
-## ID card backdrop
+## 3. (Optional) Vertical / mobile nebula crop
 
-### `/public/img/id-card/cosmic-back.jpg`
-> **Aspect**: 9:14 (matches 1080×1680 card)
-> A cosmic gradient backdrop — infinity-purple core, void-black edges, sparse
-> gold stars, halftone overlay across the lower third. No text. No characters.
+- **Path:** `public/img/hero/hero-bg-portrait.jpg` (not yet wired)
+- **Aspect:** 9:16. Same art direction as #1 but composed vertically, energy glow
+  centered around 70% height. Wire into `HeroExperience` with a media query if you
+  want a tighter mobile composition.
 
----
-
-## Manifesto / About atmosphere (optional, future)
-
-### `/public/img/manifesto/halftone-band.jpg`
-> Wide aspect 21:9 cream paper with bold halftone dot fade from left to right.
-> Used as a subtle background band.
-
----
-
-## Notes for whoever generates these
-
-- Resist the urge to add text — every text element is rendered with the site&apos;s
-  fonts.
-- Keep faces vague or absent. We&apos;re a hackathon homage, not a casting call.
-- Saturation: high contrast but not radioactive. The site is already loud.
-- File size budget: ≤ 400KB per image (compress to AVIF/WEBP where possible).
-- Match the palette anchors strictly — the page background color-morphs to each
-  track&apos;s stone color and clashes will read as broken.
+```
+Same as the hero nebula backdrop but composed for a 9:16 vertical phone screen:
+the gold + cyan ground glow sits at ~70% height with clear negative space above it,
+purple/crimson nebula across the top third, HUD circuitry faint at the vertical
+edges. NO text, NO characters.
+```
