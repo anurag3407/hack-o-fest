@@ -53,9 +53,11 @@ body {
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
+
 .lenis.lenis-smooth [data-lenis-prevent] {
   overscroll-behavior: contain;
 }
+
 .lenis.lenis-stopped {
   overflow: hidden;
 }
@@ -76,33 +78,31 @@ body {
 }
 
 .cluster-burst {
-  background: conic-gradient(
-    from 0deg,
-    var(--color-gold) 0deg 10deg,
-    transparent 10deg 30deg,
-    var(--color-gold) 30deg 40deg,
-    transparent 40deg 60deg,
-    var(--color-gold) 60deg 70deg,
-    transparent 70deg 90deg,
-    var(--color-gold) 90deg 100deg,
-    transparent 100deg 120deg,
-    var(--color-gold) 120deg 130deg,
-    transparent 130deg 150deg,
-    var(--color-gold) 150deg 160deg,
-    transparent 160deg 180deg,
-    var(--color-gold) 180deg 190deg,
-    transparent 190deg 210deg,
-    var(--color-gold) 210deg 220deg,
-    transparent 220deg 240deg,
-    var(--color-gold) 240deg 250deg,
-    transparent 250deg 270deg,
-    var(--color-gold) 270deg 280deg,
-    transparent 280deg 300deg,
-    var(--color-gold) 300deg 310deg,
-    transparent 310deg 330deg,
-    var(--color-gold) 330deg 340deg,
-    transparent 340deg 360deg
-  );
+  background: conic-gradient(from 0deg,
+      var(--color-gold) 0deg 10deg,
+      transparent 10deg 30deg,
+      var(--color-gold) 30deg 40deg,
+      transparent 40deg 60deg,
+      var(--color-gold) 60deg 70deg,
+      transparent 70deg 90deg,
+      var(--color-gold) 90deg 100deg,
+      transparent 100deg 120deg,
+      var(--color-gold) 120deg 130deg,
+      transparent 130deg 150deg,
+      var(--color-gold) 150deg 160deg,
+      transparent 160deg 180deg,
+      var(--color-gold) 180deg 190deg,
+      transparent 190deg 210deg,
+      var(--color-gold) 210deg 220deg,
+      transparent 220deg 240deg,
+      var(--color-gold) 240deg 250deg,
+      transparent 250deg 270deg,
+      var(--color-gold) 270deg 280deg,
+      transparent 280deg 300deg,
+      var(--color-gold) 300deg 310deg,
+      transparent 310deg 330deg,
+      var(--color-gold) 330deg 340deg,
+      transparent 340deg 360deg);
 }
 
 .hex-clip {
@@ -114,6 +114,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -128,6 +129,7 @@ body {
   overflow: hidden;
   vertical-align: top;
 }
+
 .split-char {
   display: inline-block;
   will-change: transform, opacity;
@@ -138,6 +140,7 @@ body {
   width: max-content;
   animation: marquee 28s linear infinite;
 }
+
 @keyframes marquee {
   to {
     transform: translateX(-50%);
@@ -147,6 +150,7 @@ body {
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
 .scrollbar-none {
   scrollbar-width: none;
 }

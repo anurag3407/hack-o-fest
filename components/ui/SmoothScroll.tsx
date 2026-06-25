@@ -11,7 +11,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) return;
 
-    const { ScrollTrigger } = registerGsap();
+    const { gsap, ScrollTrigger } = registerGsap();
     const lenis = new Lenis({
       duration: 1.15,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -20,17 +20,18 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     });
     lenisRef.current = lenis;
 
+    // Drive Lenis from GSAP's ticker and forward Lenis scroll into
+    // ScrollTrigger.update. This lockstep is what keeps scrubbed 3D/scroll
+    // animations from "shaking" against Lenis's smoothing (vs. a separate rAF
+    // loop, which runs out of phase with ScrollTrigger).
     lenis.on("scroll", ScrollTrigger.update);
-
-    let rafId = 0;
-    const raf = (time: number) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    };
-    rafId = requestAnimationFrame(raf);
+    const onTick = (time: number) => lenis.raf(time * 1000); // gsap secs → lenis ms
+    gsap.ticker.add(onTick);
+    gsap.ticker.lagSmoothing(0);
+    ScrollTrigger.refresh();
 
     return () => {
-      cancelAnimationFrame(rafId);
+      gsap.ticker.remove(onTick);
       lenis.destroy();
       lenisRef.current = null;
     };
