@@ -84,10 +84,10 @@ export function StackedTracks() {
 
   // Card wrapper styles to ensure consistent stacking size
   const cardStyle = (index: number, isLast: boolean) => ({
-    width: "80vw",
-    height: "80vh",
-    top: "10vh", // The pin point centered vertically
-    marginBottom: !isLast ? "100vh" : "60vh", // Space for the card to stay pinned while scrolling
+    width: "85vw",
+    height: "85vh",
+    top: "12vh", // The pin point centered vertically
+    marginBottom: "100vh" ,// Space for the card to stay pinned while scrolling
     borderRadius: "2.5rem",
     zIndex: index + 1,
   });
