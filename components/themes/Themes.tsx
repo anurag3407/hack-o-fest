@@ -124,8 +124,9 @@ export function Themes() {
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top 30%",
-          end: "+=2000",
+          end: "+=2500",
           pin: ".card-pin-area",
+          pinSpacing: false,
           scrub: true,
           anticipatePin: 1,
         }
@@ -162,7 +163,7 @@ export function Themes() {
       });
 
       // Small breathing room at the end before unpin
-      tl.to({}, { duration: 0.1 });
+      tl.to({}, { duration: 2 });
 
     }, root);
 
