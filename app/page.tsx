@@ -3,7 +3,7 @@ import { NewHero } from "@/components/hero/newHero";
 import { HomeAbout } from "@/components/about/HomeAbout";
 import { StackedTracks } from "@/components/tracks/StackedTracks";
 import { Tracks } from "@/components/tracks/Tracks";
-// import { Themes } from "@/components/themes/Themes";
+import { Themes } from "@/components/themes/Themes";
 import { Prizes } from "@/components/prizes/Prizes";
 import { Timeline } from "@/components/timeline/Timeline";
 import { FAQ } from "@/components/ui/FAQ";
@@ -30,6 +30,8 @@ export default function HomePage() {
         bg="bg-gold"
         fg="text-ink"
       />
+      {/*<Themes />*/}
+      <Themes />
       {/* <Tracks /> */}
       <Manifesto />
       {/* <Themes /> */}

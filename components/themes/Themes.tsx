@@ -5,7 +5,7 @@ import { registerGsap } from "@/lib/gsap";
 import { ComicBurst } from "@/components/ui/ComicBurst";
 
 const bgOpacity = 0.6;    // Image visibility
-const greyOpacity = 0.0;  
+const greyOpacity = 0.0;
 // ------------------------------------
 
 const themes = [
@@ -23,7 +23,6 @@ const themes = [
 export function Themes() {
   const rootRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isSpread, setIsSpread] = useState(false);
   const [windowWidth, setWindowWidth] = useState(1200);
 
   useEffect(() => {
@@ -42,6 +41,32 @@ export function Themes() {
     const { gsap } = registerGsap();
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    const getSpreadCoordinates = (index: number) => {
+      if (isMobile) {
+        const spreadX = 0;
+        const spreadY = (index - 4) * 330;
+        const spreadRotate = (index - 4) * 2;
+        return { spreadX, spreadY, spreadRotate };
+      }
+
+      const row = Math.floor(index / 3);
+      const colIndex = index % 3;
+      const colOffset = colIndex - 1;
+
+      if (isTablet) {
+        const spreadX = colOffset * 300;
+        const spreadY = (row - 1) * 460;
+        const spreadRotate = colOffset * 4;
+        return { spreadX, spreadY, spreadRotate };
+      }
+
+      const spreadX = colOffset * 480;
+      const spreadY = (row - 1) * 520;
+      const spreadRotate = colOffset * 5;
+
+      return { spreadX, spreadY, spreadRotate };
+    };
+
     const ctx = gsap.context(() => {
       const tiles = root.querySelectorAll<HTMLElement>(".theme-tile");
       if (reduced) {
@@ -49,6 +74,18 @@ export function Themes() {
         return;
       }
 
+      // Set initial state: cards start at their fully spread positions
+      tiles.forEach((tile, i) => {
+        const { spreadX, spreadY, spreadRotate } = getSpreadCoordinates(i);
+        gsap.set(tile, {
+          x: spreadX,
+          y: spreadY,
+          rotation: spreadRotate,
+          zIndex: i,
+        });
+      });
+
+      // Title reveal animation
       gsap.from(".big-title .split-word", {
         yPercent: 110,
         duration: 1,
@@ -60,100 +97,102 @@ export function Themes() {
         },
       });
 
-      gsap.fromTo(
-        tiles,
-        { y: 150, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.04,
-          ease: "back.out(1.2)",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 85%",
-          },
+      // Initial fade-in for tiles
+      gsap.from(tiles, {
+        y: "+=150",
+        opacity: 0,
+        duration: 1,
+        stagger: 0.04,
+        ease: "back.out(1.2)",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 85%",
+        },
+      });
+
+      // ── Pinned scroll-driven stacking timeline ──
+      // Cards start spread (3×3 grid). On scroll they collapse into
+      // three vertical column-stacks in two sequenced phases.
+      //
+      // Phase 1 (0 → 0.45): Row 2 (cards 3,4,5) move onto Row 1 (cards 0,1,2)
+      // Phase 2 (0.45 → 0.9): Row 3 (cards 6,7,8) move onto the growing stacks
+      //
+      // The stacking target for every card is the column-1 (row-0) spread
+      // position of its column-mate, with a slight vertical offset per layer.
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 30%",
+          end: "+=2000",
+          pin: ".card-pin-area",
+          scrub: true,
+          anticipatePin: 1,
         }
-      );
+      });
+
+      // For each card that needs to move, compute where it must land.
+      // Target = row-0 card in the same column + small y-offset per layer.
+      const stackOffsetY = isMobile ? -8 : -6; // slight upward shift per layer
+
+      tiles.forEach((tile, i) => {
+        const row = Math.floor(i / 3);
+        if (row === 0) return; // Row 0 cards stay put — they are the base
+
+        const colIndex = i % 3;
+        // Target position = spread coords of the base card in this column (row 0)
+        const baseIndex = colIndex; // index 0, 1, or 2
+        const { spreadX: targetX, spreadY: targetY } = getSpreadCoordinates(baseIndex);
+
+        // Layer offset: row 1 is layer 1, row 2 is layer 2
+        const layerY = targetY + (row * stackOffsetY);
+
+        // Phase timing: row 1 animates first, row 2 animates second
+        const phaseStart = row === 1 ? 0 : 0.45;
+        const phaseDuration = 0.45;
+
+        tl.to(tile, {
+          x: targetX,
+          y: layerY,
+          rotation: 0,
+          zIndex: i + 10, // higher cards on top
+          duration: phaseDuration,
+          ease: "power2.inOut",
+        }, phaseStart);
+      });
+
+      // Small breathing room at the end before unpin
+      tl.to({}, { duration: 0.1 });
+
     }, root);
 
     return () => ctx.revert();
-  }, []);
+  }, [isMobile, isTablet]);
 
-  const getSpreadCoordinates = (index: number) => {
-    if (isMobile) {
-      const spreadX = 0;
-      const spreadY = (index - 4) * 330; 
-      const spreadRotate = (index - 4) * 2;
-      return { spreadX, spreadY, spreadRotate };
-    }
-
-    const row = Math.floor(index / 3); 
-    const colIndex = index % 3;        
-    const colOffset = colIndex - 1;    
-
-    if (isTablet) {
-      const spreadX = colOffset * 300; 
-      const spreadY = (row - 1) * 460; 
-      const spreadRotate = colOffset * 4;
-      return { spreadX, spreadY, spreadRotate };
-    }
-
-    const spreadX = colOffset * 480; 
-    const spreadY = (row - 1) * 520; 
-    const spreadRotate = colOffset * 5; 
-
-    return { spreadX, spreadY, spreadRotate };
-  };
-
-  const handleMouseEnter = (index: number, e: React.MouseEvent<HTMLElement>) => {
+  const handleMouseEnter = (_index: number, e: React.MouseEvent<HTMLElement>) => {
     const { gsap } = registerGsap();
-
-    if (!isSpread) {
-      const stackedY = index * -3;
-      gsap.to(e.currentTarget, { y: stackedY - 15, scale: 1.02, duration: 0.3, ease: "power2.out" });
-    } else {
-      const { spreadX, spreadY, spreadRotate } = getSpreadCoordinates(index);
-      const liftY = isMobile ? 0 : -35;
-      const liftX = isMobile ? 15 : 0;
-
-      gsap.to(e.currentTarget, { 
-        x: spreadX + liftX,
-        y: spreadY + liftY, 
-        scale: 1.05, 
-        rotate: spreadRotate,
-        zIndex: 50, 
-        duration: 0.3, 
-        ease: "power2.out" 
-      });
-    }
+    gsap.to(e.currentTarget, {
+      scale: 1.05,
+      zIndex: 50,
+      duration: 0.3,
+      ease: "power2.out"
+    });
   };
 
   const handleMouseLeave = (index: number, e: React.MouseEvent<HTMLElement>) => {
     const { gsap } = registerGsap();
-
-    if (!isSpread) {
-      const stackedY = index * -3;
-      gsap.to(e.currentTarget, { y: stackedY, scale: 1, duration: 0.3, ease: "power2.out" });
-    } else {
-      const { spreadX, spreadY, spreadRotate } = getSpreadCoordinates(index);
-
-      gsap.to(e.currentTarget, { 
-        x: spreadX,
-        y: spreadY, 
-        scale: 1, 
-        rotate: spreadRotate,
-        zIndex: index, 
-        duration: 0.3, 
-        ease: "power2.out" 
-      });
-    }
+    gsap.to(e.currentTarget, {
+      scale: 1,
+      zIndex: index,
+      duration: 0.3,
+      ease: "power2.out"
+    });
   };
 
   const getContainerHeight = () => {
-    if (isMobile) return "3000px"; 
-    if (isTablet) return "1150px"; 
-    return "1350px"; 
+    if (isMobile) return "3000px";
+    if (isTablet) return "1150px";
+    return "1350px";
   };
 
   return (
@@ -169,11 +208,8 @@ export function Themes() {
             SECTION // 02
           </span>
           <span className="h-px flex-1 bg-ink/20" />
-          <span 
-            onClick={() => setIsSpread(!isSpread)}
-            className="font-accent text-xl md:text-5xl text-crimson tracking-wider cursor-pointer hover:scale-105 transition-transform"
-          >
-            {isSpread ? "ASSEMBLE DECK //" : "SPREAD CARDS //"}
+          <span className="font-accent text-xl md:text-5xl text-crimson tracking-wider">
+            SCROLL TO STACK //
           </span>
         </div>
 
@@ -183,43 +219,27 @@ export function Themes() {
           <span className="split-word inline-block overflow-hidden">PUNCH.</span>
         </h2>
         <p className="mt-6 md:mt-8 max-w-2xl text-ink/70 text-base md:text-xl font-body">
-          Pick a lens. Click the deck to distribute the themes like playing cards.
+          Pick a lens. Keep scrolling to watch the themes stack into columns.
         </p>
 
-        <div 
+        <div
           ref={containerRef}
-          onClick={() => !isSpread && setIsSpread(true)}
-          style={{ height: getContainerHeight() }}
-          className={`mt-16 md:mt-32 relative w-full flex items-center justify-center transition-all duration-500 ${!isSpread ? "cursor-pointer" : ""}`}
+          style={{ minHeight: getContainerHeight() }}
+          className=" card-pin-area mt-16 md:mt-32 relative w-full flex items-center justify-center"
         >
           {themes.map((t, i) => {
-            const offsetIndex = i - 4; 
-            const stackedX = 0;
-            const stackedY = i * -3; 
-            const stackedRotate = offsetIndex * 1.2;
-            const { spreadX, spreadY, spreadRotate } = getSpreadCoordinates(i);
-
             return (
               <article
                 key={t.title + i}
                 onMouseEnter={(e) => handleMouseEnter(i, e)}
                 onMouseLeave={(e) => handleMouseLeave(i, e)}
-                onClick={(e) => {
-                  if (isSpread) {
-                    e.stopPropagation(); 
-                    setIsSpread(false);
-                  }
-                }}
-                className="theme-tile absolute w-[280px] md:w-[360px] aspect-[4/5] rounded-3xl overflow-hidden p-6 md:p-9 flex flex-col justify-between transition-transform duration-500 ease-out select-none backdrop-blur-lg"
+                className="theme-tile absolute w-[280px] md:w-[360px] aspect-[4/5] rounded-3xl overflow-hidden p-6 md:p-9 flex flex-col justify-between select-none backdrop-blur-lg"
                 style={{
                   backgroundColor: "#111115DD",
                   border: `3px solid ${t.accent}88`,
                   boxShadow: `inset 0 0 16px ${t.accent}22, 0 12px 40px 0 rgba(0, 0, 0, 0.4)`,
-                  transform: isSpread 
-                    ? `translate3d(${spreadX}px, ${spreadY}px, 0) rotate(${spreadRotate}deg)`
-                    : `translate3d(${stackedX}px, ${stackedY}px, 0) rotate(${stackedRotate}deg)`,
                   zIndex: i,
-                  transformOrigin: "bottom center", 
+                  transformOrigin: "bottom center",
                 }}
               >
                 <img
@@ -229,8 +249,8 @@ export function Themes() {
                   style={{ opacity: bgOpacity }}
                   onError={(e) => { e.currentTarget.style.display = "none"; }}
                 />
-                
-                <div 
+
+                <div
                   className="absolute inset-0 z-0 bg-gray-900 pointer-events-none"
                   style={{ opacity: greyOpacity }}
                 />
